@@ -36,7 +36,7 @@ function checksTodoExists(req, res, next) {
 
   const usernameAlreadyExists = users.some((user) => user.username === username);
   if (!usernameAlreadyExists) {
-    return res.status(400).json({ err: 'Username not exists' });
+    return res.status(404).json({ err: 'Username not exists' });
   }
   if (!validate(id)) return res.status(400).json({ err: 'Id invalid' });
 
@@ -53,12 +53,12 @@ function checksTodoExists(req, res, next) {
 function findUserById(req, res, next) {
   const { id } = req.params;
   
-  const todo = user.todos.find(todo =>  todo.id === id);
-  if(!todo){
-    return res.status(404).json({err: "Todo not found"})
+  const user = users.find(user =>  user.id === id);
+  if(!user){
+    return res.status(404).json({err: "User not found"})
   }
  
-  req.todo = todo;
+  req.user = user;
 
   return next();
 }
