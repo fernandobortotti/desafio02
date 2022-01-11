@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const express = require('express');
 const cors = require('cors');
 
@@ -13,8 +14,8 @@ function checksExistsUserAccount(req, res, next) {
   const { username } = req.headers;
   const user = users.find(user => user.username === username);
 
-  if(!user){
-    return res.status(404).json({err:"Username not found!"})
+  if (!user) {
+    return res.status(404).json({ err: "Username not found!" })
   }
   req.user = user;
   return next();
@@ -23,8 +24,8 @@ function checksExistsUserAccount(req, res, next) {
 function checksCreateTodosUserAvailability(req, res, next) {
   const { user } = req
 
-  if(!user.pro && user.todos.length === 10){
-    return res.status(403).json({err:"Todos user not availability"})
+  if (!user.pro && user.todos.length === 10) {
+    return res.status(403).json({ err: "Todos user not availability" })
   }
 
   return next();
@@ -33,6 +34,8 @@ function checksCreateTodosUserAvailability(req, res, next) {
 function checksTodoExists(req, res, next) {
   const { username } = req.headers;
   const { id } = req.params;
+  const { user } = req
+
 
   const usernameAlreadyExists = users.some((user) => user.username === username);
   if (!usernameAlreadyExists) {
@@ -41,8 +44,8 @@ function checksTodoExists(req, res, next) {
   if (!validate(id)) return res.status(400).json({ err: 'Id invalid' });
 
   const todo = user.todos.find(todo => todo.id === id);
-  if(!todo){
-    return res.status(404).json({err: "Todo not found"})
+  if (!todo) {
+    return res.status(404).json({ err: "Todo not found" })
   }
 
   req.todo = todo;
@@ -52,12 +55,12 @@ function checksTodoExists(req, res, next) {
 
 function findUserById(req, res, next) {
   const { id } = req.params;
-  
-  const user = users.find(user =>  user.id === id);
-  if(!user){
-    return res.status(404).json({err: "User not found"})
+
+  const user = users.find(user => user.id === id);
+  if (!user) {
+    return res.status(404).json({ err: "User not found" })
   }
- 
+
   req.user = user;
 
   return next();
